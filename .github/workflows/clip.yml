@@ -1,0 +1,40 @@
+name: _
+on:
+  workflow_dispatch:
+      inputs:
+        URL:
+          required: true
+          type: string
+          description: "Link"
+        SS:
+          required: true
+          type: string
+          description: "Start Time"
+        TO:
+          required: true
+          type: string
+          description: "End Time"
+        FILE_NAME:
+          required: true
+          type: string
+          description: "Output FileName"
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: ffmpeg
+        run: |
+             sudo apt install ffmpeg jq
+             SS=$(jq -r '.inputs.SS' $GITHUB_EVENT_PATH)
+             TO=$(jq -r '.inputs.TO' $GITHUB_EVENT_PATH)
+             URL=$(jq -r '.inputs.URL' $GITHUB_EVENT_PATH)
+             FILE_NAME=$(jq -r '.inputs.FILE_NAME' $GITHUB_EVENT_PATH)
+             echo "File=$PWD/$FILE_NAME" >> $GITHUB_ENV
+             ffmpeg -ss "$SS" -copyts -start_at_zero -i "$URL" -ss "$SS" -to "$TO" -c copy -preset ultrafast "$FILE_NAME"
+      - name: Upload file
+        uses: actions/upload-artifact@v4
+        with:
+          name: clip
+          path: ${{ env.File }}
+          compression-level: 9
