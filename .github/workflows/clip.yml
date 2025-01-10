@@ -31,11 +31,11 @@ jobs:
              URL=$(jq -r '.inputs.URL' $GITHUB_EVENT_PATH)
              FILE_NAME=$(jq -r '.inputs.FILE_NAME' $GITHUB_EVENT_PATH)
              echo "File=$PWD/$FILE_NAME" >> $GITHUB_ENV
-             bash 1.sh $SS > 777
-             #ffmpeg -ss "$SS" -copyts -start_at_zero -i "$URL" -ss "$SS" -to "$TO" -c copy -preset ultrafast "$FILE_NAME"
+             init_seek=$(bash 1.sh $SS)
+             ffmpeg -ss "$init_seek" -copyts -start_at_zero -i "$URL" -ss "$SS" -to "$TO" -c copy -preset ultrafast "$FILE_NAME"
       - name: Upload file
         uses: actions/upload-artifact@v4
         with:
-          name: clip
-          path: 777
+          name: "$FILE_NAME"
+          path: ${{ env.File }}
           compression-level: 9
