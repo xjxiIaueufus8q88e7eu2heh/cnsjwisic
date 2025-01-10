@@ -47,7 +47,6 @@ jobs:
              echo dgh
              echo dgh > 777
              #ffmpeg -ss "$SS" -copyts -start_at_zero -i "$URL" -ss "$SS" -to "$TO" -c copy -preset ultrafast "$FILE_NAME"
-        shell: bash
       - name: Upload file
         uses: actions/upload-artifact@v4
         with:
