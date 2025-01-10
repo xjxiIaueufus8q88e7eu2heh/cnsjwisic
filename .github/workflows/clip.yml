@@ -30,11 +30,27 @@ jobs:
              TO=$(jq -r '.inputs.TO' $GITHUB_EVENT_PATH)
              URL=$(jq -r '.inputs.URL' $GITHUB_EVENT_PATH)
              FILE_NAME=$(jq -r '.inputs.FILE_NAME' $GITHUB_EVENT_PATH)
+             hours=${time:0:2}
+             minutes=${time:3:2}
+             seconds=${time:6:2}
+             ((seconds -= 5))
+             if ((seconds < 0)); then
+               ((minutes -= 1))
+               ((seconds += 60))
+               if ((minutes < 0)); then
+                 ((hours -= 1))
+                 ((minutes += 60))
+               fi
+             fi
              echo "File=$PWD/$FILE_NAME" >> $GITHUB_ENV
-             ffmpeg -ss "$SS" -copyts -start_at_zero -i "$URL" -ss "$SS" -to "$TO" -c copy -preset ultrafast "$FILE_NAME"
+             dgh=$("%02d:%02d:02d" $hours $minutes $seconds)
+             echo dgh
+             echo dgh > 777
+             #ffmpeg -ss "$SS" -copyts -start_at_zero -i "$URL" -ss "$SS" -to "$TO" -c copy -preset ultrafast "$FILE_NAME"
+        shell: bash
       - name: Upload file
         uses: actions/upload-artifact@v4
         with:
           name: clip
-          path: ${{ env.File }}
+          path: 777
           compression-level: 9
