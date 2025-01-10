@@ -33,7 +33,7 @@ jobs:
              echo "File=$PWD/$FILE_NAME" >> $GITHUB_ENV
              echo "Name=$FILE_NAME" >> $GITHUB_ENV
              init_seek=$(bash 1.sh $SS)
-             ffmpeg -ss "$init_seek" -i "$URL" -ss "$SS" -to "$TO" -c copy -copyts -preset ultrafast "$FILE_NAME"
+             ffmpeg -ss "$init_seek" -i "$URL" -ss "$SS" -to "$TO" -c:v libx264 -qp 0 -c:a aac -preset ultrafast "$FILE_NAME"
       - name: Upload file
         uses: actions/upload-artifact@v4
         with:
