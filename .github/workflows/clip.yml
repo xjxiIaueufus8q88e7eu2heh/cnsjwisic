@@ -30,9 +30,9 @@ jobs:
              TO=$(jq -r '.inputs.TO' $GITHUB_EVENT_PATH)
              URL=$(jq -r '.inputs.URL' $GITHUB_EVENT_PATH)
              FILE_NAME=$(jq -r '.inputs.FILE_NAME' $GITHUB_EVENT_PATH)
-             HH=${time:0:2}
-             MM=${time:3:2}
-             Ss=${time:6:2}
+             HH=$(cut -d: -f1 <<< "$SS")
+             MM=$(cut -d: -f2 <<< "$SS")
+             Ss=$(cut -d: -f3 <<< "$SS")
              ((Ss -= 5))
              if ((Ss < 0)); then
                ((MM -= 1))
