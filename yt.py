@@ -9,7 +9,7 @@ cookies = {
     'GPS': '1',
     'YSC': 'Nz90PHqwzjQ',
     'VISITOR_INFO1_LIVE': 'qdEa8-nzhn8',
-    'VISITOR_PRIVACY_METADATA': 'CgJJThIEGgAgJA%3D%3D',
+    'VISITOR_PRIVACY_METADATA': 'CgJJThIEGgAgJA%3D%3D'
 }
 headers = {
     'Connection': 'keep-alive',
@@ -19,11 +19,11 @@ headers = {
     'Sec-Fetch-Mode': 'navigate',
     'X-Youtube-Client-Name': '5',
     'X-Youtube-Client-Version': '19.09.3',
-    'Origin': 'https://www.youtube.com',
+    'Origin': 'https://www.youtube.com'
 }
 params = {
     'key': 'AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc',
-    'prettyPrint': 'false',
+    'prettyPrint': 'false'
 }
 
 @click.group()
