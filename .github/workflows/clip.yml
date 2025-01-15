@@ -34,7 +34,7 @@ jobs:
              echo "Name=$FILE_NAME" >> $GITHUB_ENV
              init_seek=$(bash 1.sh $SS)
              init_sec=$(bash 2.sh $SS)
-             ffmpeg -analyzeduration 2147483647 -probesize 2147483647 -ss "$init_seek" -copyts -start_at_zero -i "$URL" -ss "$init_sec" -to $(expr $init_sec + 60) -c copy -copyts -start_at_zero "$FILE_NAME"
+             ffmpeg -analyzeduration 2147483647 -probesize 2147483647 -ss "$init_seek" -copyts -start_at_zero -i "$URL" -ss "$init_sec" -to $(expr $init_sec + 60) -c:v copy -c:a copy -map 0:v -map 0:a "$FILE_NAME"
       - name: Upload file
         uses: actions/upload-artifact@v4
         with:
