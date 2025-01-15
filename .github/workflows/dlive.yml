@@ -1,4 +1,4 @@
-name: dlivestriched
+name: dlive_normal
 on:
   workflow_dispatch:
       inputs:
@@ -19,7 +19,7 @@ on:
           type: string
           description: "Output FileName"
 jobs:
-  build:
+  dlive:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -32,9 +32,7 @@ jobs:
              FILE_NAME=$(jq -r '.inputs.FILE_NAME' $GITHUB_EVENT_PATH)
              echo "File=$PWD/$FILE_NAME" >> $GITHUB_ENV
              echo "Name=$FILE_NAME" >> $GITHUB_ENV
-             init_seek=$(bash 1.sh $SS)
-             init_sec=$(bash 2.sh $SS)
-             ffmpeg -analyzeduration 2147483647 -probesize 2147483647 -ss "$init_seek" -copyts -start_at_zero -i "$URL" -ss "$init_sec" -to $(expr $init_sec + 60) -c:v copy -c:a copy -map 0:v -map 0:a "$FILE_NAME"
+             ffmpeg -ss "$SS" -to "$TO" -i "$URL" -c copy "$FILE_NAME"
       - name: Upload file
         uses: actions/upload-artifact@v4
         with:
