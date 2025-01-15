@@ -39,7 +39,8 @@ jobs:
              echo "File=$PWD/$FILE_NAME" >> $GITHUB_ENV
              echo "Name=$FILE_NAME" >> $GITHUB_ENV
              echo $QUALITY
-             python3 yt.py -L "$URL" -Q "$QUALITY" -ss "$SS" -to "$TO" -O "$FILE_NAME"
+             ls -tgh
+            # python3 yt.py -L "$URL" -Q "$QUALITY" -ss "$SS" -to "$TO" -O "$FILE_NAME"
       - name: Upload file
         uses: actions/upload-artifact@v4
         with:
