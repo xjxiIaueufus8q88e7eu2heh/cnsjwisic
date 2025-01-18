@@ -56,16 +56,14 @@ def Video():
 @Video.command()
 @click.option("--link", "-L", type=str, required=True, help="Enter your Youtube Link")
 @click.option("-ss", type=str, required=True, help="Enter input time")
-@click.option("-res", type=str, required=True, help="Enter quality")
 @click.option("-to", type=str, required=True, help="Enter output time")
 @click.option("--output", "-O", type=str, required=True, help="Enter Output filename")
-def yt(link, output, ss, to, res):
+def yt(link, output, ss, to):
     """Download youtube videos"""
     if "?" in link:
         video_id = link.split("?")[0].split("/")[-1]
     else:
         video_id = link.split("/")[-1]
-#        print(video_id, res)
     json_data = {
     'context': {
         'client': {
@@ -144,7 +142,6 @@ def yt(link, output, ss, to, res):
         'poToken': 'MlOJvu5bxinodImC2_aabxpJSxpJL3Lruc7pciZYMD7ZrroOnLnuW-F7ODOmElAWQJa-LoAf25DpJI7L6Q3tsNNtcusd-LAAe1YwbGh7IlDiV1XYFw==',
     },
 }
-#    print(json.dumps(json_data, indent=4))
     response = requests.post(
             'https://m.youtube.com/youtubei/v1/player?prettyPrint=false',
             params=params,
