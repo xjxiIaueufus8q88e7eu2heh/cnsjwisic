@@ -18,10 +18,6 @@ on:
           required: true
           type: string
           description: "Output FileName"
-        QUALITY:
-          required: true
-          type: string
-          description: "Quality"
 jobs:
   dlive:
     runs-on: ubuntu-22.04
@@ -34,16 +30,13 @@ jobs:
              SS=$(jq -r '.inputs.SS' $GITHUB_EVENT_PATH)
              TO=$(jq -r '.inputs.TO' $GITHUB_EVENT_PATH)
              URL=$(jq -r '.inputs.URL' $GITHUB_EVENT_PATH)
-             QUALITY=$(jq -r '.inputs.QUALITY' $GITHUB_EVENT_PATH)
              FILE_NAME=$(jq -r '.inputs.FILE_NAME' $GITHUB_EVENT_PATH)
              echo "File=$PWD/$FILE_NAME" >> $GITHUB_ENV
              echo "Name=$FILE_NAME" >> $GITHUB_ENV
-             echo $QUALITY
              ls -tgh
-             python3 yt.py -L $URL -Q $QUALITY -ss $SS -to $TO -O $FILE_NAME
+             python3 yt.py -L $URL -ss $SS -to $TO -O $FILE_NAME
       - name: Upload file
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.Name }}
           path: ${{ env.File }}
-          compression-level: 9
