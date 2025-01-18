@@ -55,16 +55,17 @@ def Video():
 
 @Video.command()
 @click.option("--link", "-L", type=str, required=True, help="Enter your Youtube Link")
-@click.option("--quality", "-Q", type=str, required=True, help="Enter your Video Quality")
 @click.option("-ss", type=str, required=True, help="Enter input time")
+@click.option("-res", type=str, required=True, help="Enter quality")
 @click.option("-to", type=str, required=True, help="Enter output time")
 @click.option("--output", "-O", type=str, required=True, help="Enter Output filename")
-def yt(link, quality, output, ss, to):
+def yt(link, output, ss, to, res):
     """Download youtube videos"""
     if "?" in link:
         video_id = link.split("?")[0].split("/")[-1]
     else:
         video_id = link.split("/")[-1]
+#        print(video_id, res)
     json_data = {
     'context': {
         'client': {
@@ -79,7 +80,7 @@ def yt(link, quality, output, ss, to):
             'clientVersion': '2.20250114.08.00',
             'osName': 'iPad',
             'osVersion': '18_1_1',
-            'originalUrl': f'https://m.youtube.com/watch?v={video_id}',
+            'originalUrl': f"https://m.youtube.com/watch?v={video_id}",
             'playerType': 'UNIPLAYER',
             'screenPixelDensity': 2,
             'platform': 'TABLET',
@@ -103,7 +104,7 @@ def yt(link, quality, output, ss, to):
             'utcOffsetMinutes': 330,
             'clientScreen': 'WATCH',
             'mainAppWebInfo': {
-                'graftUrl': f'/watch?v={video_id}',
+                'graftUrl': f"/watch?v={video_id}",
                 'webDisplayMode': 'WEB_DISPLAY_MODE_BROWSER',
                 'isWebNativeShareAvailable': True,
             },
@@ -120,10 +121,10 @@ def yt(link, quality, output, ss, to):
             'clickTrackingParams': 'CPwBEPxaIhMIusj6kvD7igMVrVSdCR2WSy_2MgpnLWhpZ2gtcmVjWg9GRXdoYXRfdG9fd2F0Y2iaAQYQjh4YngE=',
         },
     },
-    'videoId': f'{video_id}',
+    'videoId': f"{video_id}",
     'playbackContext': {
         'contentPlaybackContext': {
-            'currentUrl': f'/watch?v={video_id}',
+            'currentUrl': f"/watch?v={video_id}",
             'vis': 0,
             'splay': False,
             'autoCaptionsDefaultOn': False,
@@ -143,28 +144,16 @@ def yt(link, quality, output, ss, to):
         'poToken': 'MlOJvu5bxinodImC2_aabxpJSxpJL3Lruc7pciZYMD7ZrroOnLnuW-F7ODOmElAWQJa-LoAf25DpJI7L6Q3tsNNtcusd-LAAe1YwbGh7IlDiV1XYFw==',
     },
 }
+#    print(json.dumps(json_data, indent=4))
     response = requests.post(
-            'https://www.youtube.com/youtubei/v1/player',
+            'https://m.youtube.com/youtubei/v1/player?prettyPrint=false',
             params=params,
             cookies=cookies,
             headers=headers,
-            json=json_data,
-            verify=False,
+            json=json_data
     )
-    Links = [
-    ]
-
-    [
-        (
-            Links.append({"Audio": __['url']}) if 'AUDIO_QUALITY_MEDIUM' in str(__) else None,
-            Links.append({"Video": __['url']}) if f'{quality}' in str(__) and "mp4" in str(__) else None
-        )
-        for __ in json.loads(response.text)['streamingData']['adaptiveFormats']
-    ]
-
-    video = Links[0]['Video']
-    audio = Links[1]['Audio']
-    os.system(f"ffmpeg -ss {ss} -to {to} -i \"{video}\" -ss {ss} -to {to} -i \"{audio}\" -c copy {output}")
+    hls = json.loads(response.text)['streamingData']["hlsManifestUrl"]
+    os.system(f"ffmpeg -ss {ss} -to {to} -i \"{hls}\" -c copy {output}")
 if __name__ == '__main__':
     try:
         yt()
